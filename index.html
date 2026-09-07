@@ -112,8 +112,9 @@
   </section>
 
   <section class="card">
-    <button type="button" id="formulaToggle" class="btn btn--link" aria-expanded="false" data-i18n="formulaToggleShow">
-      Voir la formule détaillée
+    <button type="button" id="formulaToggle" class="formula-toggle" aria-expanded="false">
+      <span class="formula-toggle__chevron" aria-hidden="true">&#9656;</span>
+      <span id="formulaToggleText" data-i18n="formulaToggleShow">Voir la formule détaillée</span>
     </button>
     <div id="formulaWrapper" hidden>
       <div id="formulaContainer" class="formula-container"></div>

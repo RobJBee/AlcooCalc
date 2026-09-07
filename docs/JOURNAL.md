@@ -56,3 +56,8 @@ tags: [journal]
   ascenseur vertical apparaissait. Corrigé dans `css/styles.css` : `overflow-y: hidden` explicite,
   hauteur de ligne augmentée (`min-height`, `padding`, `line-height`), `align-items: center`.
   Vérifié dans le navigateur (SW + cache vidés au préalable pour écarter le CSS déjà en cache).
+- Retour utilisateur : "Voir la formule détaillée" devait avoir le même style (gras/majuscules) que
+  les titres de section ("Résultats") et un chevron d'expansion. Bouton restylé en `.formula-toggle`
+  (même apparence que `.card h2/h3`) avec un chevron `▸` qui pivote à 90° (`aria-expanded='true'`)
+  quand la section est ouverte. Vérifié dans le navigateur : style cohérent, rotation et changement
+  de texte ("Masquer la formule") au clic.

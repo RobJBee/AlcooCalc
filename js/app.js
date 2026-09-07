@@ -44,6 +44,7 @@ function cacheEls() {
   els.btnCopy = $('btnCopy');
   els.copyFeedback = $('copyFeedback');
   els.formulaToggle = $('formulaToggle');
+  els.formulaToggleText = $('formulaToggleText');
   els.formulaWrapper = $('formulaWrapper');
   els.formulaContainer = $('formulaContainer');
   els.formulaSteps = $('formulaSteps');
@@ -131,7 +132,7 @@ function syncPair(rangeEl, numberEl, onChange) {
 function setFormulaVisible(visible) {
   els.formulaWrapper.hidden = !visible;
   els.formulaToggle.setAttribute('aria-expanded', String(visible));
-  els.formulaToggle.textContent = t(visible ? 'formulaToggleHide' : 'formulaToggleShow');
+  els.formulaToggleText.textContent = t(visible ? 'formulaToggleHide' : 'formulaToggleShow');
 }
 
 function showErrors(errorKeys) {

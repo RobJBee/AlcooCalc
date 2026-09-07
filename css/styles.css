@@ -319,6 +319,40 @@ input[type='range']::-moz-range-thumb {
   font-size: 0.8rem;
 }
 
+.formula-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px dashed var(--border-color);
+  margin: 0;
+  padding: 0 0 0.5rem;
+  cursor: pointer;
+  color: var(--terminal-green);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: left;
+}
+
+.formula-toggle:hover {
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+}
+
+.formula-toggle__chevron {
+  display: inline-block;
+  font-size: 0.8em;
+  transition: transform 0.15s ease;
+}
+
+.formula-toggle[aria-expanded='true'] .formula-toggle__chevron {
+  transform: rotate(90deg);
+}
+
 .formula-container {
   overflow-x: auto;
   overflow-y: hidden;
