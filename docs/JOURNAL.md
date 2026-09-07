@@ -44,3 +44,9 @@ tags: [journal]
 - Prochaine étape : tester le mode hors-ligne réel (installer la PWA, couper le réseau, vérifier le
   cache) ; valider visuellement sur mobile réel ; envisager le déploiement (GitHub Pages ?) une fois
   le feu vert donné par l'utilisateur.
+- Retour utilisateur : le champ "Coefficient d'expansion (k)" affichait 0.00063 L/g, illisible
+  (trois zéros après la virgule). Champ converti en mL/g pour l'affichage (0.63 mL/g), conversion
+  en L/g faite dans `js/app.js` juste avant l'appel à `calculateDilution`/`renderFormula` — la
+  formule interne (et son affichage KaTeX) reste inchangée, en L/g, conformément à l'ADR 0002.
+  Vérifié : mêmes résultats qu'avant (Ve=0.509L, ms=250g, Vf=1.667L, expansion=157.5mL) pour les
+  valeurs par défaut.

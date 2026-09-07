@@ -5,7 +5,7 @@ const DEFAULTS = {
   c0: 50,
   cf: 30,
   sconc: 150,
-  k: 0.00063,
+  k: 0.63, // mL/g (affichage) ; converti en L/g avant tout calcul
   preset: 'custom',
   advancedOpen: false,
   formulaOpen: false,
@@ -166,18 +166,19 @@ function renderResults(results) {
 
 function compute({ recordHistory } = { recordHistory: false }) {
   const input = readInputsFromForm();
-  const results = calculateDilution(input.v0, input.c0, input.cf, input.sconc, input.k);
+  const kLg = input.k / 1000; // le champ "k" est saisi en mL/g, la formule attend du L/g
+  const results = calculateDilution(input.v0, input.c0, input.cf, input.sconc, kLg);
   lastResults = results;
   renderResults(results);
 
   if (!els.formulaWrapper.hidden) {
-    renderFormula(els.formulaContainer, els.formulaSteps, input.v0, input.c0, input.cf, input.sconc, input.k, results);
+    renderFormula(els.formulaContainer, els.formulaSteps, input.v0, input.c0, input.cf, input.sconc, kLg, results);
   }
 
   saveInputs(input);
 
   if (recordHistory && results.feasible) {
-    pushHistory(input, results);
+    pushHistory(Object.assign({}, input, { k: kLg }), results);
   }
 }
 
