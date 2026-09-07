@@ -160,7 +160,8 @@ body.app-ready .app-content {
   padding: 1rem 1.2rem;
 }
 
-.card h2, .card h3 {
+.card h2, .card h3, .card-title {
+  display: block;
   margin-top: 0;
   color: var(--terminal-green);
   font-size: 1rem;
@@ -483,7 +484,7 @@ input[type='range']::-moz-range-thumb {
     grid-template-areas:
       'params  results'
       'presets history';
-    align-items: start;
+    align-items: stretch;
     gap: 1rem;
   }
 

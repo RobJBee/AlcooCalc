@@ -139,3 +139,13 @@ tags: [journal]
     flux mobile) reste inchangé, seul l'ordre visuel change en desktop.
   - Cache PWA bump à `alcoocalc-v6`. Testé en 1200×900 (desktop) et 375×812 (mobile) : mise en page
     correcte dans les deux cas, aucune flèche native visible, aucune erreur console.
+- Retour utilisateur : les cartes ne remplissaient pas la hauteur de leur ligne (Résultats restait
+  plus petit que Paramètres, Alcool de base plus petit qu'Historique, malgré le partage de la même
+  piste de ligne CSS Grid) — cause : `align-items: start` sur `.app-main` empêchait les cartes de
+  s'étirer. Passé à `align-items: stretch` (comportement par défaut de CSS Grid) : les cartes
+  remplissent maintenant toute la hauteur de leur ligne. Vérifié par mesure directe des hauteurs
+  (`getBoundingClientRect`) : Paramètres/Résultats = 397px chacun, Alcool de base/Historique = 108px
+  chacun, parfaitement alignés. Titre "Alcool de base" aligné visuellement sur le style des autres
+  titres de section (nouvelle classe partagée `.card-title`, appliquée au `<label>` en plus des
+  règles existantes sur `.card h2/h3`). Cache PWA bump à `alcoocalc-v7`. Testé desktop (1200×900) et
+  mobile (375×812) : rendu correct, aucune régression, aucune erreur console.
