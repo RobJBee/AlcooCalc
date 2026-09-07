@@ -35,12 +35,12 @@
 
 <main class="app-main">
 
-  <section class="card" aria-labelledby="presetLabel">
+  <section class="card card--presets" aria-labelledby="presetLabel">
     <label id="presetLabel" for="presetSelect" data-i18n="presetLabel">Alcool de base</label>
     <select id="presetSelect" class="terminal-select"></select>
   </section>
 
-  <section class="card" aria-labelledby="inputsTitle">
+  <section class="card card--params" aria-labelledby="inputsTitle">
     <h2 id="inputsTitle" data-i18n="inputsTitle">Paramètres</h2>
 
     <div class="field">
@@ -89,7 +89,7 @@
 
   <p id="errorBox" class="error-box" role="alert" hidden></p>
 
-  <section class="card" aria-labelledby="resultsTitle">
+  <section class="card card--results" aria-labelledby="resultsTitle">
     <h2 id="resultsTitle" data-i18n="resultsTitle">Résultats</h2>
 
     <div class="result-row">
@@ -123,7 +123,7 @@
     </details>
   </section>
 
-  <section class="card" aria-labelledby="historyTitle">
+  <section class="card card--history" aria-labelledby="historyTitle">
     <div class="history-header">
       <h2 id="historyTitle" data-i18n="historyTitle">Historique</h2>
       <button type="button" id="btnClearHistory" class="btn btn--link" data-i18n="historyClear">Effacer l'historique</button>

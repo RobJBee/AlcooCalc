@@ -20,12 +20,14 @@ tags: [roadmap]
 - Testé dans le navigateur (via un petit serveur local `scripts/serve.ps1`) : calculs conformes à
   l'exemple de référence du cahier des charges, presets, validation, i18n, historique, reset et
   responsive mobile tous fonctionnels.
+- Déployé sur GitHub Pages : **https://robjbee.github.io/AlcooCalc/** (dépôt rendu public par
+  l'utilisateur). Service worker vérifié fonctionnel en HTTPS réel.
+- Mise en page desktop (≥1024px) revue : grille 2×2 explicite (Paramètres/Résultats en haut,
+  Alcool de base/Historique en bas, alignés), flèches natives des champs numériques supprimées.
 
 ## 🔜 À faire
-- Vérifier le mode hors-ligne réel (installation PWA, coupure réseau) — nécessite un contexte
-  sécurisé (https ou localhost), pas testable sur simple `file://`.
-- Test visuel sur un téléphone réel (au-delà de l'émulation mobile du navigateur).
-- Décider d'un éventuel déploiement (ex. GitHub Pages) — à faire seulement sur feu vert explicite.
+- Test visuel sur un téléphone réel (au-delà de l'émulation mobile du navigateur) — le site étant
+  maintenant en ligne, l'utilisateur peut le faire directement.
 
 ## 💬 À trancher
 - Portée exacte de l'historique en localStorage (actuellement : 10 derniers calculs, sans limite de

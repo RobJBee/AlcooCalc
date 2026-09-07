@@ -117,3 +117,25 @@ tags: [journal]
     verrouillages bien étalée sur toute la largeur ; capture en plein fondu confirmant que l'app
     apparaît bien en transparence par-dessus la pluie encore visible et en mouvement. Testé aussi
     avec les vraies durées : cycle complet sans erreur console.
+- Déploiement : l'utilisateur a activé GitHub Pages (Settings → Pages → Deploy from branch `main`,
+  dossier `/`). Site en ligne et vérifié fonctionnel sur `https://robjbee.github.io/AlcooCalc/`
+  (service worker bien enregistré, HTTPS oblige — contrairement aux tests locaux sur `file://` ou
+  IP LAN, le mode hors-ligne/PWA est donc pleinement testable en conditions réelles, y compris
+  depuis un smartphone). Le dépôt GitHub a aussi été rendu public par l'utilisateur (Pages n'exige
+  pas la visibilité publique du dépôt, mais c'est son choix).
+- Retour utilisateur (desktop ≥1024px) : (1) les champs numériques affichaient les flèches natives
+  du navigateur sous forme d'un bloc gris disgracieux ("ascenseurs") ; (2) déséquilibre visuel entre
+  les colonnes "Paramètres"/"Résultats" ; (3) déplacer "Alcool de base" sous "Paramètres", aligné
+  avec "Historique". Corrigé :
+  - `css/styles.css` : flèches natives des `input[type=number]` masquées (`appearance: textfield` +
+    reset des pseudo-éléments WebKit `::-webkit-inner/outer-spin-button`) — redondantes avec le
+    slider, et rendues de façon incohérente selon navigateur/OS.
+  - Grille desktop remplacée par un `grid-template-areas` explicite (2×2 : Paramètres/Résultats en
+    haut, Alcool de base/Historique en bas), avec des classes dédiées (`card--params`,
+    `card--presets`, `card--results`, `card--history`) au lieu des sélecteurs `nth-child` fragiles
+    utilisés avant (qui comptaient mal les enfants à cause du `<p id="errorBox">` intercalé). Comme
+    les deux colonnes partagent les mêmes pistes de ligne (row tracks) en CSS Grid, "Alcool de base"
+    et "Historique" s'alignent automatiquement sans hack supplémentaire — l'ordre du DOM (donc le
+    flux mobile) reste inchangé, seul l'ordre visuel change en desktop.
+  - Cache PWA bump à `alcoocalc-v6`. Testé en 1200×900 (desktop) et 375×812 (mobile) : mise en page
+    correcte dans les deux cas, aucune flèche native visible, aucune erreur console.
