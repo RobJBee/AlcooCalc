@@ -1,31 +1,40 @@
 'use strict';
 
 /*
- * Animation d'ouverture "pluie Matrix" (canvas plein écran), ~3s :
+ * Animation d'ouverture "pluie Matrix" (canvas plein écran) :
  * - la pluie tombe normalement (caractères aléatoires, traînée qui s'efface) ;
- * - environ 20% des caractères réellement affichés à l'écran (titre, titres de
+ * - ~40% des caractères réellement affichés à l'écran (titre, titres de
  *   section, labels, boutons — récupérés depuis le vrai DOM, encore invisible
  *   à opacity:0 mais déjà mis en page) se "verrouillent" à leur vraie position,
  *   dans leur vraie couleur, à un moment aléatoire pendant la pluie, et restent
- *   figés : l'interface se construit visiblement sous les yeux de l'utilisateur ;
- * - ralentissement progressif sur la dernière demi-seconde, puis fondu croisé
- *   vers l'interface réelle en dessous.
+ *   figés : l'interface se construit visiblement sous les yeux de l'utilisateur.
+ *   Le tirage favorise les caractères à droite de l'écran (il y en a
+ *   proportionnellement moins, la plupart des textes commençant à gauche) ;
+ * - au moment où la pluie commence à ralentir, le fondu-enchaîné démarre :
+ *   l'app apparaît en transparence pendant que la pluie (qui continue de
+ *   ralentir/tourner) disparaît en transparence, sur une transition longue.
  * Cliquer/toucher l'écran permet de passer l'animation. Sautée instantanément
  * si l'utilisateur a activé "prefers-reduced-motion".
  */
 (function initSplash() {
-  const RAIN_DURATION_MS = 3000;
-  const SLOWDOWN_MS = 500; // derniers ms de la pluie où elle ralentit
-  const FADE_MS = 700;
+  const PRE_SLOWDOWN_MS = 2500; // durée de pluie à vitesse normale
+  const SLOWDOWN_MS = 500; // ralentissement progressif, en parallèle du début du fondu
+  const FADE_MS = 1050; // durée du fondu-enchaîné (700ms *1.5), démarre avec le ralentissement
   const LOCK_RATIO = 0.4; // proportion des caractères réels qui se verrouillent tôt
-  const LOCK_WINDOW = [400, 2700]; // ms : fenêtre où les verrouillages se répartissent
+  const LOCK_WINDOW = [400, PRE_SLOWDOWN_MS - 100]; // ms : fenêtre où les verrouillages se répartissent
+  const RIGHT_BIAS = 3; // poids relatif donné aux caractères les plus à droite lors du tirage
 
   const splash = document.getElementById('splashScreen');
   const canvas = document.getElementById('matrixCanvas');
   const appContent = document.getElementById('appContent');
   if (!splash || !canvas) return;
 
-  const finishSplash = () => {
+  let fadeStarted = false;
+  let stopped = false;
+
+  const startFade = () => {
+    if (fadeStarted) return;
+    fadeStarted = true;
     document.body.classList.add('app-ready');
     splash.classList.add('is-hidden');
     setTimeout(() => {
@@ -33,9 +42,21 @@
     }, FADE_MS);
   };
 
+  const stopLoop = () => {
+    if (stopped) return;
+    stopped = true;
+    if (rafId) cancelAnimationFrame(rafId);
+    window.removeEventListener('resize', resize);
+  };
+
+  const skip = () => {
+    stopLoop();
+    startFade();
+  };
+
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) {
-    finishSplash();
+    startFade();
     return;
   }
 
@@ -95,11 +116,22 @@
     return results;
   }
 
+  // Tirage pondéré sans remise (algorithme A-Res) : les caractères les plus à
+  // droite ont plus de chances d'être choisis, pour compenser le fait qu'il y
+  // en a proportionnellement moins (la plupart des textes commencent à gauche).
   function pickLockTargets() {
     const all = harvestRealChars();
-    const shuffled = all.sort(() => Math.random() - 0.5);
+    const viewportW = window.innerWidth || 1;
+
+    const weighted = all.map((c) => {
+      const xRatio = Math.min(1, Math.max(0, c.x / viewportW));
+      const weight = 1 + xRatio * RIGHT_BIAS;
+      return { c, key: Math.pow(Math.random(), 1 / weight) };
+    });
+    weighted.sort((a, b) => b.key - a.key);
+
     const count = Math.round(all.length * LOCK_RATIO);
-    return shuffled.slice(0, count).map((c) => ({
+    return weighted.slice(0, count).map(({ c }) => ({
       ...c,
       lockAt: LOCK_WINDOW[0] + Math.random() * (LOCK_WINDOW[1] - LOCK_WINDOW[0]),
     }));
@@ -122,7 +154,6 @@
 
   let rafId = null;
   const startTime = performance.now();
-  let finished = false;
 
   function drawLockedChars(elapsed) {
     for (const t of lockTargets) {
@@ -137,13 +168,13 @@
   function draw(now) {
     const elapsed = now - startTime;
 
-    // ralentit progressivement la pluie sur les derniers SLOWDOWN_MS pour donner
-    // l'impression qu'elle "se met en place" avant de se dissoudre.
-    const slowdownStart = RAIN_DURATION_MS - SLOWDOWN_MS;
+    // ralentit progressivement la pluie une fois PRE_SLOWDOWN_MS écoulé, en
+    // même temps que démarre le fondu-enchaîné vers l'interface réelle.
     let speedFactor = 1;
-    if (elapsed > slowdownStart) {
-      const t = Math.min(1, (elapsed - slowdownStart) / SLOWDOWN_MS);
+    if (elapsed > PRE_SLOWDOWN_MS) {
+      const t = Math.min(1, (elapsed - PRE_SLOWDOWN_MS) / SLOWDOWN_MS);
       speedFactor = 1 - t * 0.85;
+      startFade();
     }
 
     ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
@@ -169,23 +200,16 @@
 
     drawLockedChars(elapsed);
 
-    if (elapsed < RAIN_DURATION_MS && !finished) {
+    const totalDuration = PRE_SLOWDOWN_MS + FADE_MS;
+    if (elapsed < totalDuration && !stopped) {
       rafId = requestAnimationFrame(draw);
     } else {
-      finish();
+      stopLoop();
     }
   }
 
-  function finish() {
-    if (finished) return;
-    finished = true;
-    if (rafId) cancelAnimationFrame(rafId);
-    window.removeEventListener('resize', resize);
-    finishSplash();
-  }
-
-  splash.addEventListener('click', finish);
-  splash.addEventListener('touchstart', finish, { passive: true });
+  splash.addEventListener('click', skip);
+  splash.addEventListener('touchstart', skip, { passive: true });
 
   rafId = requestAnimationFrame(draw);
 })();

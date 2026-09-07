@@ -99,3 +99,21 @@ tags: [journal]
   allongée à 15s pour observer, remise à 3000 avant commit) : rendu bien plus dense et lisible, le
   titre "AlcooCalc" apparaît presque en entier ; testé aussi avec la vraie durée de 3s pour confirmer
   que le cycle complet (pluie → app-ready) fonctionne toujours correctement.
+- Retour utilisateur (travail sur la transition) : (1) privilégier les caractères à droite de
+  l'écran lors du tirage des verrouillages (proportionnellement moins nombreux) ; (2) démarrer le
+  fondu-enchaîné dès que la pluie commence à ralentir (plutôt qu'après la fin complète), avec une
+  transition 50% plus longue, l'app apparaissant en transparence pendant que la pluie (qui continue
+  de tourner/ralentir) disparaît aussi en transparence. Implémenté dans `js/splash.js` :
+  - Tirage pondéré sans remise (algorithme A-Res, poids = `1 + xRatio*RIGHT_BIAS` avec
+    `RIGHT_BIAS=3`) au lieu d'un tirage uniforme, pour favoriser les caractères à x élevé.
+  - Timeline restructurée : `PRE_SLOWDOWN_MS` (2500ms, pluie normale) → au-delà, ralentissement
+    (`SLOWDOWN_MS`=500ms) ET déclenchement simultané du fondu (`startFade()`, avant seulement
+    appelé en toute fin) ; la boucle d'animation continue de tourner (pluie visible à travers le
+    fondu) jusqu'à la fin du fondu, pas seulement jusqu'à la fin de la pluie. `FADE_MS` 700→1050ms
+    (+50%), durée de transition CSS mise à jour en conséquence dans `css/styles.css`
+    (`.app-content`/`.splash`). `LOCK_WINDOW` resserré à `[400, PRE_SLOWDOWN_MS-100]` pour que tous
+    les verrouillages soient résolus avant le début du fondu. Cache PWA bump à `alcoocalc-v5`.
+  - Testé (durée temporairement allongée à 15s, remise à 2500 avant commit) : répartition des
+    verrouillages bien étalée sur toute la largeur ; capture en plein fondu confirmant que l'app
+    apparaît bien en transparence par-dessus la pluie encore visible et en mouvement. Testé aussi
+    avec les vraies durées : cycle complet sans erreur console.
