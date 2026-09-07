@@ -78,3 +78,18 @@ tags: [journal]
   transition vers l'app sans erreur console. Non vérifié directement : le chemin
   `prefers-reduced-motion` (pas d'outil d'émulation disponible pour ce test) — la logique est
   simple (un `matchMedia` + retour anticipé) donc risque jugé faible.
+- Amélioration du splash (demande utilisateur) : "que certaines lettres de la pluie s'arrêtent au
+  bon endroit et que l'écran se construise sous les yeux de l'utilisateur". Implémenté dans
+  `js/splash.js` : au démarrage, un `TreeWalker` parcourt le vrai DOM (`#appContent`, encore à
+  opacity:0 mais déjà mis en page) et récupère tous les caractères de texte visibles à l'écran avec
+  leur position exacte (`Range.getBoundingClientRect`), taille, casse (CSS `text-transform`) et
+  couleur réelles. ~20% d'entre eux (`LOCK_RATIO`) sont tirés au sort et se "verrouillent" à un
+  instant aléatoire réparti sur les 400-2700ms de la pluie (`LOCK_WINDOW`), dans un flash blanc bref
+  puis leur vraie couleur ; une fois verrouillés ils sont redessinés chaque frame donc restent nets,
+  contrairement aux caractères de pluie ordinaires qui continuent de s'effacer. Résultat : des
+  fragments reconnaissables de l'interface (titre, "PARAMÈTRES", labels, boutons) apparaissent et se
+  stabilisent au bon endroit pendant la pluie, avant le fondu final vers l'interface complète.
+  Test réalisé en allongeant temporairement `RAIN_DURATION_MS` à 15s (la latence entre mes appels
+  d'outils dépassait les 3s réelles, rendant l'observation impossible sinon) : capture d'écran en
+  cours d'animation confirmant des fragments lisibles ("PARAMÈTRES", "Volume initial", "Effacer
+  l'historique"...) bien positionnés et colorés correctement ; valeur remise à 3000 avant de committer.
