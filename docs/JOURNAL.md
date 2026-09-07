@@ -18,5 +18,29 @@ tags: [journal]
   calculateur d'alcoolémie), en HTML/CSS/JS vanilla, thème "terminal mainframe" (vert Matrix sur fond
   noir), bilingue FR/EN, mobile-first, PWA (offline), KaTeX pour les formules, localStorage pour les
   préférences/historique.
-- Prochaine étape : recevoir la suite du cahier des charges (formules exactes de dilution + sucre,
-  champs d'entrée/sortie, maquette UI), puis créer le dépôt GitHub et pousser le premier commit.
+- Dépôt GitHub `RobJBee/AlcooCalc` (privé) créé par l'utilisateur puis relié en remote ; premier
+  commit poussé sur `main`.
+- Cahier des charges complet reçu (structure de fichiers, fonctionnalités, design, et documentation
+  détaillée des formules mathématiques). Le modèle de calcul fourni par l'utilisateur est identique
+  à celui déjà anticipé et implémenté : conservation de l'alcool pur, sucre visé dans le volume
+  final, expansion volumique du sucre (coefficient k), eau par bilan volumétrique. Voir ADR
+  [0002](decisions/0002-formule-dilution-sucre.md).
+- Scaffolding complet réalisé : `index.html`, `css/styles.css` (thème terminal mainframe, responsive
+  320px→1920px), `js/translations.js` (i18n FR/EN persistant), `js/presets.js` (11 alcools),
+  `js/formulas.js` (calcul + rendu KaTeX + étapes substituées), `js/app.js` (sliders synchronisés,
+  calcul temps réel, validation, historique 10 dernières entrées, copier dans le presse-papiers,
+  sauvegarde localStorage), `manifest.json` + `sw.js` (PWA, cache-first avec mise en cache
+  opportuniste des polices KaTeX), icônes PWA 192/512 générées, `README.md`.
+- KaTeX 0.16.9 (JS + CSS + les 60 fichiers de polices) téléchargé et vendored en local dans
+  `js/katex/` — aucune dépendance CDN, conforme à l'exigence "100% local".
+- Testé dans le navigateur (serveur de test PowerShell `scripts/serve.ps1`, créé faute de Node/Python
+  disponibles sur la machine) : calcul en temps réel conforme à l'exemple du cahier des charges
+  (V0=1L, C0=50%, Cf=30%, S=150g/L → Ve=0.509L, ms=250g, Vf=1.667L, expansion=157.5mL), presets
+  fonctionnels, formule KaTeX + étapes affichées correctement, validation Cf≥C0 bloque bien le
+  calcul avec message d'erreur, changement de langue FR/EN traduit toute l'interface (y compris la
+  formule et l'historique déjà affichés), historique enregistré correctement, reset fonctionnel,
+  responsive mobile (375px) vérifié. Mode hors-ligne (service worker) non testé en profondeur : son
+  enregistrement nécessite un contexte sécurisé (http/https), non vérifiable sur `file://`.
+- Prochaine étape : tester le mode hors-ligne réel (installer la PWA, couper le réseau, vérifier le
+  cache) ; valider visuellement sur mobile réel ; envisager le déploiement (GitHub Pages ?) une fois
+  le feu vert donné par l'utilisateur.

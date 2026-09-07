@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>AlcooCalc — Calculateur de dilution alcool + sucre</title>
+<meta name="description" content="Calculateur local de dilution alcool + sucre, avec formules détaillées." />
+<meta name="theme-color" content="#000000" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="assets/icons/icon-192.png" />
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+<link rel="stylesheet" href="js/katex/katex.min.css" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div class="scanlines" aria-hidden="true"></div>
+
+<header class="app-header">
+  <div class="app-header__title">
+    <h1 data-i18n="appTitle">AlcooCalc</h1>
+    <span class="cursor" aria-hidden="true"></span>
+  </div>
+  <p class="app-header__subtitle" data-i18n="appSubtitle">Calculateur de dilution alcool + sucre</p>
+
+  <div class="lang-switch" role="group" aria-label="Langue / Language">
+    <button type="button" data-lang-btn="fr" class="lang-btn">FR</button>
+    <button type="button" data-lang-btn="en" class="lang-btn">EN</button>
+  </div>
+</header>
+
+<main class="app-main">
+
+  <section class="card" aria-labelledby="presetLabel">
+    <label id="presetLabel" for="presetSelect" data-i18n="presetLabel">Alcool de base</label>
+    <select id="presetSelect" class="terminal-select"></select>
+  </section>
+
+  <section class="card" aria-labelledby="inputsTitle">
+    <h2 id="inputsTitle" data-i18n="inputsTitle">Paramètres</h2>
+
+    <div class="field">
+      <label for="v0Number"><span data-i18n="labelV0">Volume initial (V₀)</span> <span class="unit" data-i18n="unitL">L</span></label>
+      <div class="field__controls">
+        <input type="range" id="v0Range" min="0.1" max="10" step="0.05" value="1.0" />
+        <input type="number" id="v0Number" min="0.1" max="10" step="0.05" value="1.0" inputmode="decimal" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="c0Number"><span data-i18n="labelC0">Alcool initial (C₀)</span> <span class="unit" data-i18n="unitPercent">%</span></label>
+      <div class="field__controls">
+        <input type="range" id="c0Range" min="1" max="96" step="0.5" value="50" />
+        <input type="number" id="c0Number" min="1" max="96" step="0.5" value="50" inputmode="decimal" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="cfNumber"><span data-i18n="labelCf">Alcool cible (C_f)</span> <span class="unit" data-i18n="unitPercent">%</span></label>
+      <div class="field__controls">
+        <input type="range" id="cfRange" min="1" max="95" step="0.5" value="30" />
+        <input type="number" id="cfNumber" min="1" max="95" step="0.5" value="30" inputmode="decimal" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="sconcNumber"><span data-i18n="labelSconc">Sucre visé (S)</span> <span class="unit" data-i18n="unitGL">g/L</span></label>
+      <div class="field__controls">
+        <input type="range" id="sconcRange" min="0" max="500" step="5" value="150" />
+        <input type="number" id="sconcNumber" min="0" max="500" step="5" value="150" inputmode="decimal" />
+      </div>
+    </div>
+
+    <details id="advancedSection" class="advanced">
+      <summary data-i18n="advancedToggle">Avancé</summary>
+      <div class="field">
+        <label for="kNumber"><span data-i18n="labelK">Coefficient d'expansion (k)</span> <span class="unit" data-i18n="unitLg">L/g</span></label>
+        <div class="field__controls">
+          <input type="range" id="kRange" min="0.0001" max="0.001" step="0.00001" value="0.00063" />
+          <input type="number" id="kNumber" min="0.0001" max="0.001" step="0.00001" value="0.00063" inputmode="decimal" />
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <p id="errorBox" class="error-box" role="alert" hidden></p>
+
+  <section class="card" aria-labelledby="resultsTitle">
+    <h2 id="resultsTitle" data-i18n="resultsTitle">Résultats</h2>
+
+    <div class="result-row">
+      <span class="result-row__label" data-i18n="resultWater">Eau à ajouter</span>
+      <span class="result-row__value" id="resultWater">—</span>
+    </div>
+    <div class="result-row">
+      <span class="result-row__label" data-i18n="resultSugar">Sucre à ajouter</span>
+      <span class="result-row__value" id="resultSugar">—</span>
+    </div>
+    <div class="result-row">
+      <span class="result-row__label" data-i18n="resultFinalVolume">Volume final</span>
+      <span class="result-row__value" id="resultFinalVolume">—</span>
+    </div>
+    <div class="result-row">
+      <span class="result-row__label" data-i18n="resultExpansion">Expansion due au sucre</span>
+      <span class="result-row__value" id="resultExpansion">—</span>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="btnReset" class="btn" data-i18n="btnReset">Réinitialiser</button>
+      <button type="button" id="btnCopy" class="btn btn--primary" data-i18n="btnCopy">Copier les résultats</button>
+      <span id="copyFeedback" class="copy-feedback" data-i18n="copiedMsg" hidden>Copié !</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <button type="button" id="formulaToggle" class="btn btn--link" aria-expanded="false" data-i18n="formulaToggleShow">
+      Voir la formule détaillée
+    </button>
+    <div id="formulaWrapper" hidden>
+      <div id="formulaContainer" class="formula-container"></div>
+      <h3 data-i18n="stepsTitle">Étapes du calcul</h3>
+      <div id="formulaSteps" class="formula-steps"></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="historyTitle">
+    <div class="history-header">
+      <h2 id="historyTitle" data-i18n="historyTitle">Historique</h2>
+      <button type="button" id="btnClearHistory" class="btn btn--link" data-i18n="historyClear">Effacer l'historique</button>
+    </div>
+    <div id="historyList" class="history-list"></div>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  <p data-i18n="footerText">100% local · aucune donnée envoyée · fonctionne hors-ligne</p>
+</footer>
+
+<script src="js/katex/katex.min.js"></script>
+<script src="js/translations.js"></script>
+<script src="js/presets.js"></script>
+<script src="js/formulas.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
