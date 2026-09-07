@@ -109,18 +109,13 @@
       <button type="button" id="btnCopy" class="btn btn--primary" data-i18n="btnCopy">Copier les résultats</button>
       <span id="copyFeedback" class="copy-feedback" data-i18n="copiedMsg" hidden>Copié !</span>
     </div>
-  </section>
 
-  <section class="card">
-    <button type="button" id="formulaToggle" class="formula-toggle" aria-expanded="false">
-      <span class="formula-toggle__chevron" aria-hidden="true">&#9656;</span>
-      <span id="formulaToggleText" data-i18n="formulaToggleShow">Voir la formule détaillée</span>
-    </button>
-    <div id="formulaWrapper" hidden>
+    <details id="formulaSection" class="advanced">
+      <summary data-i18n="formulaToggleShow">Voir la formule détaillée</summary>
       <div id="formulaContainer" class="formula-container"></div>
       <h3 data-i18n="stepsTitle">Étapes du calcul</h3>
       <div id="formulaSteps" class="formula-steps"></div>
-    </div>
+    </details>
   </section>
 
   <section class="card" aria-labelledby="historyTitle">

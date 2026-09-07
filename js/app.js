@@ -43,9 +43,7 @@ function cacheEls() {
   els.btnReset = $('btnReset');
   els.btnCopy = $('btnCopy');
   els.copyFeedback = $('copyFeedback');
-  els.formulaToggle = $('formulaToggle');
-  els.formulaToggleText = $('formulaToggleText');
-  els.formulaWrapper = $('formulaWrapper');
+  els.formulaSection = $('formulaSection');
   els.formulaContainer = $('formulaContainer');
   els.formulaSteps = $('formulaSteps');
   els.historyList = $('historyList');
@@ -98,7 +96,7 @@ function readInputsFromForm() {
     k: parseFloat(els.kNumber.value),
     preset: els.presetSelect.value,
     advancedOpen: els.advancedSection.open,
-    formulaOpen: els.formulaWrapper.hidden === false,
+    formulaOpen: els.formulaSection.open,
   };
 }
 
@@ -115,7 +113,7 @@ function applyInputsToForm(state) {
   els.kNumber.value = state.k;
   els.presetSelect.value = state.preset || 'custom';
   els.advancedSection.open = !!state.advancedOpen;
-  setFormulaVisible(!!state.formulaOpen);
+  els.formulaSection.open = !!state.formulaOpen;
 }
 
 function syncPair(rangeEl, numberEl, onChange) {
@@ -127,12 +125,6 @@ function syncPair(rangeEl, numberEl, onChange) {
     rangeEl.value = numberEl.value;
     onChange();
   });
-}
-
-function setFormulaVisible(visible) {
-  els.formulaWrapper.hidden = !visible;
-  els.formulaToggle.setAttribute('aria-expanded', String(visible));
-  els.formulaToggleText.textContent = t(visible ? 'formulaToggleHide' : 'formulaToggleShow');
 }
 
 function showErrors(errorKeys) {
@@ -172,7 +164,7 @@ function compute({ recordHistory } = { recordHistory: false }) {
   lastResults = results;
   renderResults(results);
 
-  if (!els.formulaWrapper.hidden) {
+  if (els.formulaSection.open) {
     renderFormula(els.formulaContainer, els.formulaSteps, input.v0, input.c0, input.cf, input.sconc, kLg, results);
   }
 
@@ -274,7 +266,6 @@ function resetToDefaults() {
 
 function onLanguageChanged(lang) {
   populatePresets(els.presetSelect, lang);
-  setFormulaVisible(els.formulaWrapper.hidden === false);
   renderHistory();
   compute({ recordHistory: false });
 }
@@ -317,11 +308,8 @@ function wireEvents() {
     renderHistory();
   });
 
-  els.formulaToggle.addEventListener('click', () => {
-    const nowVisible = els.formulaWrapper.hidden;
-    setFormulaVisible(nowVisible);
-    if (nowVisible) compute({ recordHistory: false });
-    saveInputs(readInputsFromForm());
+  els.formulaSection.addEventListener('toggle', () => {
+    compute({ recordHistory: false });
   });
 
   els.langButtons.forEach((btn) => {

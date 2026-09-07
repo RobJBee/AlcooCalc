@@ -61,3 +61,10 @@ tags: [journal]
   (même apparence que `.card h2/h3`) avec un chevron `▸` qui pivote à 90° (`aria-expanded='true'`)
   quand la section est ouverte. Vérifié dans le navigateur : style cohérent, rotation et changement
   de texte ("Masquer la formule") au clic.
+- L'utilisateur est revenu sur ce choix : la formule déplacée dans le widget "Résultats" (après les
+  boutons Réinitialiser/Copier), avec le même format que "Avancé" (élément `<details>/<summary>`
+  natif, triangle de disclosure natif, texte statique). Le bouton personnalisé + chevron CSS créés à
+  l'étape précédente sont retirés (code mort). `js/app.js` adapté : `els.formulaSection` (un
+  `<details>`) remplace `els.formulaToggle`/`formulaWrapper` ; l'événement natif `toggle` déclenche
+  le calcul/rendu de la formule à l'ouverture. Clé de traduction `formulaToggleHide` supprimée
+  (devenue inutile, le texte ne change plus). Vérifié dans le navigateur.
