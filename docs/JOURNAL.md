@@ -68,3 +68,13 @@ tags: [journal]
   `<details>`) remplace `els.formulaToggle`/`formulaWrapper` ; l'événement natif `toggle` déclenche
   le calcul/rendu de la formule à l'ouverture. Clé de traduction `formulaToggleHide` supprimée
   (devenue inutile, le texte ne change plus). Vérifié dans le navigateur.
+- Ajout du splash screen demandé (roadmap v2) : animation d'ouverture "pluie Matrix" (canvas plein
+  écran, `js/splash.js`), ~3s puis ralentissement progressif sur les derniers 500ms ("les caractères
+  se mettent en place"), fondu croisé de 700ms vers l'interface réelle (classe `app-ready` sur
+  `<body>`, contenu enveloppé dans `#appContent`). Clic/tap pour passer l'animation ; sautée
+  instantanément si `prefers-reduced-motion` est actif. `sw.js` mis à jour (nouveau fichier
+  précaché, cache renommé `alcoocalc-v2` pour forcer la mise à jour chez les utilisateurs existants).
+  Testé dans le navigateur (desktop + mobile 375px) : rendu correct, clic-pour-passer fonctionnel,
+  transition vers l'app sans erreur console. Non vérifié directement : le chemin
+  `prefers-reduced-motion` (pas d'outil d'émulation disponible pour ce test) — la logique est
+  simple (un `matchMedia` + retour anticipé) donc risque jugé faible.

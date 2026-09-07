@@ -1,12 +1,13 @@
 'use strict';
 
-const CACHE_NAME = 'alcoocalc-v1';
+const CACHE_NAME = 'alcoocalc-v2';
 
 const CORE_ASSETS = [
   './',
   './index.html',
   './css/styles.css',
   './js/app.js',
+  './js/splash.js',
   './js/formulas.js',
   './js/presets.js',
   './js/translations.js',

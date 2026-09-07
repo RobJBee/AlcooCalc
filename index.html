@@ -13,6 +13,11 @@
 <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+<div id="splashScreen" class="splash">
+  <canvas id="matrixCanvas"></canvas>
+</div>
+
+<div id="appContent" class="app-content">
 <div class="scanlines" aria-hidden="true"></div>
 
 <header class="app-header">
@@ -131,11 +136,13 @@
 <footer class="app-footer">
   <p data-i18n="footerText">100% local · aucune donnée envoyée · fonctionne hors-ligne</p>
 </footer>
+</div>
 
 <script src="js/katex/katex.min.js"></script>
 <script src="js/translations.js"></script>
 <script src="js/presets.js"></script>
 <script src="js/formulas.js"></script>
+<script src="js/splash.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
