@@ -50,3 +50,9 @@ tags: [journal]
   formule interne (et son affichage KaTeX) reste inchangée, en L/g, conformément à l'ADR 0002.
   Vérifié : mêmes résultats qu'avant (Ve=0.509L, ms=250g, Vf=1.667L, expansion=157.5mL) pour les
   valeurs par défaut.
+- Retour utilisateur : de petites barres de défilement grises apparaissaient sur chaque ligne des
+  "Étapes du calcul". Cause : `overflow-x: auto` sur `.formula-step` force la spec CSS à calculer
+  `overflow-y: auto` aussi ; dès que la fraction KaTeX dépassait de peu la hauteur de la ligne, un
+  ascenseur vertical apparaissait. Corrigé dans `css/styles.css` : `overflow-y: hidden` explicite,
+  hauteur de ligne augmentée (`min-height`, `padding`, `line-height`), `align-items: center`.
+  Vérifié dans le navigateur (SW + cache vidés au préalable pour écarter le CSS déjà en cache).

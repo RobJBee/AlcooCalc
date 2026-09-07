@@ -321,7 +321,8 @@ input[type='range']::-moz-range-thumb {
 
 .formula-container {
   overflow-x: auto;
-  padding: 0.6rem 0;
+  overflow-y: hidden;
+  padding: 0.8rem 0;
   color: var(--text-primary);
 }
 
@@ -332,15 +333,18 @@ input[type='range']::-moz-range-thumb {
 .formula-steps {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.7rem;
 }
 
 .formula-step {
   display: flex;
-  gap: 0.6rem;
-  align-items: baseline;
+  gap: 0.7rem;
+  align-items: center;
   overflow-x: auto;
-  font-size: 0.85rem;
+  overflow-y: hidden;
+  min-height: 2.6rem;
+  padding: 0.3rem 0;
+  font-size: 0.9rem;
 }
 
 .formula-step__num {
@@ -350,7 +354,8 @@ input[type='range']::-moz-range-thumb {
 
 .formula-step__math .katex {
   color: var(--text-primary);
-  font-size: 0.95em;
+  font-size: 1.05em;
+  line-height: 1.9;
 }
 
 .history-header {
