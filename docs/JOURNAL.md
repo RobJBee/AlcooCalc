@@ -157,3 +157,13 @@ tags: [journal]
   et `margin-bottom: 0.6rem` à la règle `.card h2, .card h3, .card-title`. Cache PWA bump à
   `alcoocalc-v8`. Vérifié dans le navigateur : titre "ALCOOL DE BASE" désormais identique en gras
   aux autres titres de section.
+- Retour utilisateur : passer le texte des options du menu "Alcool de base" en blanc, et le
+  surlignage (actuellement bleu, natif du navigateur) en vert. Ajout de règles `.terminal-select
+  option` (texte blanc) et `option:checked`/`:hover` (fond vert) dans `css/styles.css`. Testé dans
+  le navigateur : le texte blanc s'applique bien, mais le surlignage reste bleu — limitation connue
+  des navigateurs Chromium (Chrome/Edge, y compris Chrome Android) : la couleur de l'option
+  survolée/en cours de sélection dans la liste déroulante native est dessinée par le navigateur et
+  ignore `background-color` en CSS, quel que soit le sélecteur utilisé. Vraie solution : remplacer
+  le `<select>` natif par un menu déroulant personnalisé (bouton + liste stylée). Proposé à
+  l'utilisateur, qui a choisi de garder le natif tel quel (texte blanc conservé, surlignage bleu
+  accepté). Cache PWA bump à `alcoocalc-v9`.

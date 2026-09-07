@@ -195,6 +195,22 @@ input[type='number'] {
   font-size: 0.95rem;
 }
 
+/* Options du dropdown natif : texte blanc, surlignage vert (au lieu du bleu
+   par défaut du navigateur) au survol/à la sélection. Le support exact varie
+   selon navigateur/OS (le rendu de la liste déroulante d'un <select> natif
+   n'est pas entièrement stylable partout), mais fonctionne sur Chromium
+   (Chrome/Edge, desktop et Android). */
+.terminal-select option {
+  background: var(--bg-primary);
+  color: #ffffff;
+}
+
+.terminal-select option:checked,
+.terminal-select option:hover {
+  background: var(--terminal-green);
+  color: #000000;
+}
+
 /* Masque les flèches natives (redondantes avec le slider, et rendues comme un
    bloc gris qui jure avec le thème sur certains navigateurs/OS). */
 input[type='number'] {
