@@ -28,6 +28,7 @@ function cacheEls() {
   els.v0Field = $('v0Field');
   els.v0Range = $('v0Range');
   els.v0Number = $('v0Number');
+  els.vfTargetRange = $('vfTargetRange');
   els.vfTargetNumber = $('vfTargetNumber');
   els.c0Range = $('c0Range');
   els.c0Number = $('c0Number');
@@ -108,6 +109,9 @@ function applyInputsToForm(state) {
   els.v0Range.value = state.v0;
   els.v0Number.value = state.v0;
   els.vfTargetNumber.value = Number.isFinite(state.vfTarget) ? state.vfTarget : '';
+  if (Number.isFinite(state.vfTarget)) {
+    els.vfTargetRange.value = state.vfTarget;
+  }
   els.c0Range.value = state.c0;
   els.c0Number.value = state.c0;
   els.cfRange.value = state.cf;
@@ -128,6 +132,21 @@ function syncPair(rangeEl, numberEl, onChange) {
   });
   numberEl.addEventListener('input', () => {
     rangeEl.value = numberEl.value;
+    onChange();
+  });
+}
+
+function syncPairOptional(rangeEl, numberEl, onChange) {
+  // Comme syncPair, mais le champ nombre peut être vide (paramètre optionnel) :
+  // on ne répercute alors pas de valeur invalide sur le slider.
+  rangeEl.addEventListener('input', () => {
+    numberEl.value = rangeEl.value;
+    onChange();
+  });
+  numberEl.addEventListener('input', () => {
+    if (numberEl.value !== '') {
+      rangeEl.value = numberEl.value;
+    }
     onChange();
   });
 }
@@ -301,8 +320,10 @@ function wireEvents() {
     });
   });
 
-  els.vfTargetNumber.addEventListener('input', () => compute({ recordHistory: false }));
-  els.vfTargetNumber.addEventListener('change', () => compute({ recordHistory: true }));
+  syncPairOptional(els.vfTargetRange, els.vfTargetNumber, () => compute({ recordHistory: false }));
+  [els.vfTargetRange, els.vfTargetNumber].forEach((el) => {
+    el.addEventListener('change', () => compute({ recordHistory: true }));
+  });
   [els.v0Range, els.c0Range, els.cfRange, els.sconcRange, els.kRange].forEach((el) => {
     el.addEventListener('change', () => {
       els.presetSelect.value = 'custom';

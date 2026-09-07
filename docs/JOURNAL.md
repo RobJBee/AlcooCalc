@@ -8,6 +8,18 @@ tags: [journal]
 
 # Journal — AlcooCalc
 
+## 2026-09-07 (suite 2)
+- Fait : uniformisation du champ "Volume final" (ex-"Volume cible") avec les autres paramètres, à
+  la demande de l'utilisateur : ajout d'un slider synchronisé (comme V₀/C₀/C_f/S), champ nombre
+  réduit et aligné à droite (retour au layout `field__controls` standard au lieu d'un champ pleine
+  largeur), libellé simplifié en "Volume final" (FR) / "Final volume" (EN), sans changement de
+  logique de calcul.
+- Implémentation : `syncPairOptional()` (`js/app.js`) synchronise slider ↔ champ nombre en gérant
+  le cas où le champ est vidé (le slider conserve alors sa dernière position, sans forcer de valeur
+  invalide). Cache PWA bumpé à `alcoocalc-v11`.
+- Testé dans le navigateur : glisser le slider active bien le calcul inverse (V₀ grisé/recalculé),
+  vider le champ nombre réactive V₀ ; traduction EN vérifiée.
+
 ## 2026-09-07 (suite)
 - Fait : ajout du paramètre optionnel "Volume cible (V_f)" dans la section Paramètres, à la
   demande de l'utilisateur ("la prochaine fois nous mettrons en œuvre la roadmap pour la v2 ;

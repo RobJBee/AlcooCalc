@@ -249,10 +249,6 @@ button:focus-visible {
   align-items: center;
 }
 
-.field__controls--single {
-  grid-template-columns: 1fr;
-}
-
 .field__hint {
   margin: 0.35rem 0 0;
   font-size: 0.72rem;
