@@ -31,3 +31,16 @@ tags: [roadmap]
 - Portée exacte de l'historique en localStorage (actuellement : 10 derniers calculs, sans limite de
   durée) — suffisant ou faut-il purger après un certain temps ?
 - Faut-il des icônes PWA soignées (actuellement des placeholders générés "AC" sur fond noir/vert) ?
+
+## 🔮 v2 — Pistes UX (validées par l'utilisateur le 2026-09-07, pas encore implémentées)
+- **Résultat "collant" sur mobile** : un résumé compact (eau/sucre) reste visible en bas d'écran
+  pendant qu'on ajuste les sliders, pour éviter l'aller-retour de scroll entre paramètres et résultats.
+- **Historique cliquable** : cliquer sur une entrée recharge ces valeurs dans les champs ; ajouter
+  aussi la suppression d'une entrée individuelle (pas seulement "Effacer tout").
+- **Aide contextuelle (?)** : petites infobulles expliquant les champs moins évidents ("Sucre visé",
+  "Coefficient d'expansion").
+- **Accessibilité + erreurs visibles** : `aria-live` pour que les lecteurs d'écran annoncent le
+  résultat après un changement ; surligner en rouge le champ fautif (ex. "Alcool cible") en cas
+  d'erreur, en plus du message déjà affiché.
+- **Splash screen au lancement** : animation d'introduction (en cours de cadrage — l'utilisateur a une
+  référence vidéo YouTube à partager).
