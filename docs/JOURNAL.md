@@ -149,3 +149,11 @@ tags: [journal]
   titres de section (nouvelle classe partagée `.card-title`, appliquée au `<label>` en plus des
   règles existantes sur `.card h2/h3`). Cache PWA bump à `alcoocalc-v7`. Testé desktop (1200×900) et
   mobile (375×812) : rendu correct, aucune régression, aucune erreur console.
+- Retour utilisateur (capture à l'appui) : le titre "Alcool de base" n'apparaissait pas en gras
+  malgré la classe `.card-title`. Cause : le gras de `h2`/`h3` vient du style par défaut du
+  navigateur (jamais déclaré explicitement dans la règle CSS partagée), donc le `<label>` n'en
+  hérite pas — de même pour la marge basse (headings ont une marge par défaut, pas les labels),
+  ce qui écrasait aussi la lisibilité de la ligne pointillée. Ajout explicite de `font-weight: bold`
+  et `margin-bottom: 0.6rem` à la règle `.card h2, .card h3, .card-title`. Cache PWA bump à
+  `alcoocalc-v8`. Vérifié dans le navigateur : titre "ALCOOL DE BASE" désormais identique en gras
+  aux autres titres de section.
