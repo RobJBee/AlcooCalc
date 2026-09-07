@@ -24,6 +24,10 @@ tags: [roadmap]
   l'utilisateur). Service worker vérifié fonctionnel en HTTPS réel.
 - Mise en page desktop (≥1024px) revue : grille 2×2 explicite (Paramètres/Résultats en haut,
   Alcool de base/Historique en bas, alignés), flèches natives des champs numériques supprimées.
+- Nouveau paramètre **Volume cible (V_f)** : champ optionnel dans "Paramètres" qui, une fois
+  renseigné, remplace V₀ dans le calcul (V₀ requis = Vf_cible × Cf / C0) ; le champ V₀ devient
+  alors lecture seule (grisé) et affiche la valeur calculée, redevient éditable dès que le champ
+  cible est vidé.
 
 ## 🔜 À faire
 - Test visuel sur un téléphone réel (au-delà de l'émulation mobile du navigateur) — le site étant

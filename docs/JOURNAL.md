@@ -8,6 +8,23 @@ tags: [journal]
 
 # Journal — AlcooCalc
 
+## 2026-09-07 (suite)
+- Fait : ajout du paramètre optionnel "Volume cible (V_f)" dans la section Paramètres, à la
+  demande de l'utilisateur ("la prochaine fois nous mettrons en œuvre la roadmap pour la v2 ;
+  ajoute une feature à laquelle je viens de penser : ajouter un Paramètre 'Volume cible'").
+- Décidé (via AskUserQuestion) : le champ est optionnel et, une fois renseigné, **remplace** V₀
+  dans le calcul plutôt que de proposer un mode bascule séparé — option choisie par l'utilisateur
+  parmi 3 propositions.
+- Implémentation : `compute()` (`js/app.js`) calcule V₀ requis = Vf_cible × C_f / C₀ dès que le
+  champ cible est un nombre fini > 0 (et C₀ > 0) ; le champ/slider V₀ est alors désactivé
+  (`disabled`, classe `.is-computed`) et affiche cette valeur calculée. Vider le champ cible
+  réactive V₀ (dernière valeur calculée conservée comme point de départ éditable). Les étapes de
+  calcul détaillées (KaTeX) et l'historique utilisent bien le V₀ effectif (calculé ou saisi).
+  i18n FR/EN ajoutée (`labelVfTarget`, `vfTargetHint`). Cache PWA bumpé à `alcoocalc-v10`.
+- Testé dans le navigateur : remplissage du volume cible → V₀ recalculé et champ grisé ; effacement
+  → V₀ redevient éditable ; résultats, étapes de formule et historique cohérents ; traduction EN
+  vérifiée.
+
 ## 2026-09-07
 - Fait : création du dossier de projet (`C:\Users\Robert\Documents\Apps\AlcooCalc`), dépôt git local
   initialisé (branche `main`), structure de mémoire mise en place (`AGENTS.md`, `docs/JOURNAL.md`,

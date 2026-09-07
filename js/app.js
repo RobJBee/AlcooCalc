@@ -2,6 +2,7 @@
 
 const DEFAULTS = {
   v0: 1.0,
+  vfTarget: null, // optionnel : si renseigné, remplace V0 dans le calcul
   c0: 50,
   cf: 30,
   sconc: 150,
@@ -24,8 +25,10 @@ function $(id) {
 
 function cacheEls() {
   els.presetSelect = $('presetSelect');
+  els.v0Field = $('v0Field');
   els.v0Range = $('v0Range');
   els.v0Number = $('v0Number');
+  els.vfTargetNumber = $('vfTargetNumber');
   els.c0Range = $('c0Range');
   els.c0Number = $('c0Number');
   els.cfRange = $('cfRange');
@@ -90,6 +93,7 @@ function saveHistory(history) {
 function readInputsFromForm() {
   return {
     v0: parseFloat(els.v0Number.value),
+    vfTarget: parseFloat(els.vfTargetNumber.value),
     c0: parseFloat(els.c0Number.value),
     cf: parseFloat(els.cfNumber.value),
     sconc: parseFloat(els.sconcNumber.value),
@@ -103,6 +107,7 @@ function readInputsFromForm() {
 function applyInputsToForm(state) {
   els.v0Range.value = state.v0;
   els.v0Number.value = state.v0;
+  els.vfTargetNumber.value = Number.isFinite(state.vfTarget) ? state.vfTarget : '';
   els.c0Range.value = state.c0;
   els.c0Number.value = state.c0;
   els.cfRange.value = state.cf;
@@ -160,18 +165,30 @@ function renderResults(results) {
 function compute({ recordHistory } = { recordHistory: false }) {
   const input = readInputsFromForm();
   const kLg = input.k / 1000; // le champ "k" est saisi en mL/g, la formule attend du L/g
-  const results = calculateDilution(input.v0, input.c0, input.cf, input.sconc, kLg);
+
+  const vfTargetActive = Number.isFinite(input.vfTarget) && input.vfTarget > 0 && input.c0 > 0;
+  let v0 = input.v0;
+  if (vfTargetActive) {
+    v0 = (input.vfTarget * input.cf) / input.c0;
+    els.v0Number.value = v0.toFixed(3);
+    els.v0Range.value = Math.min(Math.max(v0, Number(els.v0Range.min)), Number(els.v0Range.max));
+  }
+  els.v0Number.disabled = vfTargetActive;
+  els.v0Range.disabled = vfTargetActive;
+  els.v0Field.classList.toggle('is-computed', vfTargetActive);
+
+  const results = calculateDilution(v0, input.c0, input.cf, input.sconc, kLg);
   lastResults = results;
   renderResults(results);
 
   if (els.formulaSection.open) {
-    renderFormula(els.formulaContainer, els.formulaSteps, input.v0, input.c0, input.cf, input.sconc, kLg, results);
+    renderFormula(els.formulaContainer, els.formulaSteps, v0, input.c0, input.cf, input.sconc, kLg, results);
   }
 
-  saveInputs(input);
+  saveInputs(Object.assign({}, input, { v0 }));
 
   if (recordHistory && results.feasible) {
-    pushHistory(Object.assign({}, input, { k: kLg }), results);
+    pushHistory(Object.assign({}, input, { v0, k: kLg }), results);
   }
 }
 
@@ -283,6 +300,9 @@ function wireEvents() {
       compute({ recordHistory: true });
     });
   });
+
+  els.vfTargetNumber.addEventListener('input', () => compute({ recordHistory: false }));
+  els.vfTargetNumber.addEventListener('change', () => compute({ recordHistory: true }));
   [els.v0Range, els.c0Range, els.cfRange, els.sconcRange, els.kRange].forEach((el) => {
     el.addEventListener('change', () => {
       els.presetSelect.value = 'custom';
