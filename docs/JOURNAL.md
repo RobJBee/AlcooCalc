@@ -93,3 +93,9 @@ tags: [journal]
   d'outils dépassait les 3s réelles, rendant l'observation impossible sinon) : capture d'écran en
   cours d'animation confirmant des fragments lisibles ("PARAMÈTRES", "Volume initial", "Effacer
   l'historique"...) bien positionnés et colorés correctement ; valeur remise à 3000 avant de committer.
+- Retour utilisateur : ralentir la pluie et passer le taux de verrouillage à 40%. `LOCK_RATIO`
+  0.2→0.4 et vitesse de chute réduite de moitié (`0.6*speedFactor+0.1` → `0.3*speedFactor+0.05`)
+  dans `js/splash.js`. Cache PWA bump à `alcoocalc-v4`. Testé (même méthode : durée temporairement
+  allongée à 15s pour observer, remise à 3000 avant commit) : rendu bien plus dense et lisible, le
+  titre "AlcooCalc" apparaît presque en entier ; testé aussi avec la vraie durée de 3s pour confirmer
+  que le cycle complet (pluie → app-ready) fonctionne toujours correctement.

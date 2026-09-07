@@ -17,7 +17,7 @@
   const RAIN_DURATION_MS = 3000;
   const SLOWDOWN_MS = 500; // derniers ms de la pluie où elle ralentit
   const FADE_MS = 700;
-  const LOCK_RATIO = 0.2; // proportion des caractères réels qui se verrouillent tôt
+  const LOCK_RATIO = 0.4; // proportion des caractères réels qui se verrouillent tôt
   const LOCK_WINDOW = [400, 2700]; // ms : fenêtre où les verrouillages se répartissent
 
   const splash = document.getElementById('splashScreen');
@@ -164,7 +164,7 @@
       if (y > canvas.height && Math.random() > 0.975) {
         drops[i] = 0;
       }
-      drops[i] += 0.6 * speedFactor + 0.1;
+      drops[i] += 0.3 * speedFactor + 0.05;
     }
 
     drawLockedChars(elapsed);
