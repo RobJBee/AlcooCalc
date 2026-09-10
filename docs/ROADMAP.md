@@ -20,8 +20,10 @@ tags: [roadmap]
 - Testé dans le navigateur (via un petit serveur local `scripts/serve.ps1`) : calculs conformes à
   l'exemple de référence du cahier des charges, presets, validation, i18n, historique, reset et
   responsive mobile tous fonctionnels.
-- Déployé sur GitHub Pages : **https://robjbee.github.io/AlcooCalc/** (dépôt rendu public par
-  l'utilisateur). Service worker vérifié fonctionnel en HTTPS réel.
+- Déployé sur GitHub Pages : **https://glorfindev.github.io/AlcooCalc/** (dépôt rendu public par
+  l'utilisateur, puis transféré du compte `RobJBee` vers `gLOrFinDeV` le 2026-09-10 — voir ADR
+  [0003](decisions/0003-deploiement-github-pages.md)). Service worker vérifié fonctionnel en HTTPS
+  réel.
 - Mise en page desktop (≥1024px) revue : grille 2×2 explicite (Paramètres/Résultats en haut,
   Alcool de base/Historique en bas, alignés), flèches natives des champs numériques supprimées.
 - Nouveau paramètre **Volume final** : champ optionnel (slider + nombre, même style que les autres

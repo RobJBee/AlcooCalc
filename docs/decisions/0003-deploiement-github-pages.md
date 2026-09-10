@@ -19,7 +19,8 @@ sur une IP locale en `http://`).
 ## Décision
 - Hébergement sur **GitHub Pages**, déploiement depuis la branche `main`, dossier `/` (racine) —
   aucune étape de build nécessaire, l'app étant 100% statique (HTML/CSS/JS vanilla).
-- URL : **https://robjbee.github.io/AlcooCalc/**
+- URL : **https://glorfindev.github.io/AlcooCalc/** (dépôt transféré de `RobJBee` à `gLOrFinDeV`
+  le 2026-09-10 ; ancienne URL `robjbee.github.io/AlcooCalc` redirigée automatiquement par GitHub).
 - Le dépôt GitHub, initialement privé, a été rendu **public** par l'utilisateur. Ce n'était pas
   strictement nécessaire (GitHub Pages publie le site construit sur une URL publique même depuis un
   dépôt privé, sauf sur GitHub Enterprise), mais c'est le choix fait.

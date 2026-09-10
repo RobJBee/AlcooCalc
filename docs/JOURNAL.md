@@ -1,12 +1,28 @@
 ---
 title: Journal du projet
 status: actif
-last-reviewed: 2026-09-07
+last-reviewed: 2026-09-10
 sources: []
 tags: [journal]
 ---
 
 # Journal — AlcooCalc
+
+## 2026-09-10
+- Fait : transfert complet du dépôt GitHub du compte `RobJBee` vers le nouveau compte
+  `gLOrFinDeV` (transfert d'ownership natif GitHub, effectué par l'utilisateur via Settings →
+  Danger Zone → Transfer ownership). Historique et commits conservés.
+- Fait : remote git local mis à jour (`origin` pointe maintenant vers
+  `https://github.com/gLOrFinDeV/AlcooCalc.git`), connectivité vérifiée (`git fetch`). GitHub
+  Pages vérifié fonctionnel sous la nouvelle URL **https://glorfindev.github.io/AlcooCalc/**.
+- Fait : mise à jour des mentions de l'ancienne URL dans `docs/ROADMAP.md` et
+  `docs/decisions/0003-deploiement-github-pages.md`. Les entrées de journal antérieures au
+  transfert ne sont pas réécrites (journal append-only) ; elles mentionnent encore `RobJBee` par
+  fidélité historique.
+- Contexte : en amont, l'utilisateur a cherché à connecter son smartphone à cette session Claude
+  Code via Remote Control et a rencontré l'erreur "Remote control session is offline" ; clarifié
+  que Remote Control projette la session tournant sur le PC (qui doit rester allumé/connecté) et
+  n'est pas une session cloud indépendante — aucune action de code liée à ce point.
 
 ## 2026-09-07 (suite 2)
 - Fait : uniformisation du champ "Volume final" (ex-"Volume cible") avec les autres paramètres, à
